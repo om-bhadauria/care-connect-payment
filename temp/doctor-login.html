@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load Lucide Icons for professional UI elements -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <title>Doctor Login</title>
+</head>
+<body>
+    <main class="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8 flex-grow flex items-center justify-center">
+    <div class="w-full max-w-md">
+        <div class="text-center mb-8">
+            <a href="#" class="text-3xl font-bold text-gray-800 flex items-center justify-center mb-2">
+                <i data-lucide="activity" class="w-6 h-6 mr-2 text-success"></i>
+                CareConnect Pro
+            </a>
+            <h1 class="text-2xl font-semibold text-gray-900 mt-4">Doctor Sign In</h1>
+            <p class="text-gray-600 text-sm">Access your professional dashboard and patient schedules.</p>
+        </div>
+
+        <!-- Doctor Login Card -->
+        <div class="bg-white p-8 rounded-xl shadow-lg card-shadow">
+            <form id="form-doctor-signin" class="space-y-6">
+                <!-- Email/ID Field -->
+                <div>
+                    <label for="doctor-signin-email" class="block text-sm font-medium text-gray-700">Registration ID or Email</label>
+                    <input type="text" id="doctor-signin-email" name="email" required placeholder="Medical ID or email"
+                           class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-success focus:border-success transition">
+                </div>
+                <!-- Password Field -->
+                <div>
+                    <label for="doctor-signin-password" class="block text-sm font-medium text-gray-700">Password</label>
+                    <input type="password" id="doctor-signin-password" name="password" required placeholder="••••••••"
+                           class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-success focus:border-success transition">
+                    <div class="flex justify-end mt-2">
+                        <a href="#" class="text-xs text-primary hover:text-blue-700 font-medium">Forgot Password?</a>
+                    </div>
+                </div>
+                
+                <button type="submit" class="w-full py-2.5 px-4 border border-transparent rounded-lg shadow-md text-base font-medium text-white bg-green-700 hover:bg-green-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-success transition duration-150">
+                    Secure Sign In
+                </button>
+            </form>
+        </div>
+        
+        <!-- Links -->
+        <div class="mt-6 text-center text-sm space-y-2">
+            <p class="text-gray-600">
+                Need to register? 
+                <a href="/templates/doctor-sign-up.html" class="text-success hover:text-green-700 font-semibold underline">Complete Doctor Registration</a>
+            </p>
+            <p class="text-gray-600">
+                <i data-lucide="arrow-left" class="w-4 h-4 inline-block mr-1 align-sub"></i>
+                <a href="/templates/login.html" class="text-primary hover:text-blue-700 font-medium">Go back to Patient Login</a>
+            </p>
+        </div>
+    </div>
+</main>
+</body>
+</html>

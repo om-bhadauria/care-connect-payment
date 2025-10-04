@@ -1,0 +1,187 @@
+{% extends "base.html" %}
+
+{% block title %}Find Doctors - CareConnect{% endblock %}
+
+{% block content %}
+<header class="text-center mb-10 mt-10">
+    <h1 class="text-3xl font-normal text-gray-800 mb-2">Find a Doctor</h1>
+    <p class="text-lg text-gray-500">Your trusted partner in finding healthcare in India.</p>
+</header>
+
+<!-- Filter Bar -->
+<section class="mb-10 flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
+    <button id="near-me-button" class="flex items-center justify-center bg-primary text-white px-5 py-2.5 rounded-lg font-medium shadow-md hover:bg-blue-800 transition duration-150 text-sm">
+        <i data-lucide="compass" class="w-4 h-4 mr-2"></i>
+        Find Doctors Near Me
+    </button>
+    <div class="relative">
+        <select id="specialty-filter" class="w-full sm:w-48 px-4 py-2.5 border border-gray-300 rounded-lg bg-white appearance-none pr-10 focus:border-primary focus:ring-primary focus:ring-1 transition duration-150 text-sm text-gray-700">
+            <option value="All Specializations">All Specializations</option>
+            <option value="Cardiologist">Cardiologist</option>
+            <option value="Neurologist">Neurologist</option>
+            <option value="Dermatologist">Dermatologist</option>
+            <option value="Orthopedic Surgeon">Orthopedic Surgeon</option>
+            <option value="Pediatrician">Pediatrician</option>
+            <option value="General Physician">General Physician</option>
+        </select>
+        <i data-lucide="chevron-down" class="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-600 pointer-events-none"></i>
+    </div>
+</section>
+
+<!-- Doctor Listing Grid -->
+<section>
+    <div id="doctor-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Doctor Cards will be rendered here by JavaScript -->
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Your JavaScript code for the doctors page
+    const allDoctors = [
+        { id: 1, name: "Dr. Sandeep Srivastava", specialties: ["Cardiologist", "Interventional Cardiology"], location: "Indore", phone: "123-456-7890", image: "https://placehold.co/40x40/F0F8FF/1e40af?text=SS" },
+        { id: 2, name: "Dr. R.K. Sodani", specialties: ["Neurologist", "Epilepsy Specialist"], location: "Los Angeles", phone: "123-456-7891", image: "https://placehold.co/40x40/E6F2FF/1e40af?text=RS" },
+        { id: 3, name: "Dr. Z.S. Rana", specialties: ["Orthopedic Surgeon", "Joint Replacement"], location: "Indore", phone: "123-456-7892", image: "https://placehold.co/40x40/A2CFFD/1e40af?text=ZR" },
+        { id: 4, name: "Dr. Abha Jain", specialties: ["Dermatologist", "Cosmetic Dermatology"], location: "Indore", phone: "123-456-7893", image: "https://placehold.co/40x40/D291BC/1e40af?text=AJ" },
+        { id: 5, name: "Dr. Sanjay Porwal", specialties: ["Pediatrician", "Neurotology"], location: "Los Angeles", phone: "123-456-7894", image: "https://placehold.co/40x40/C3D898/1e40af?text=SP" },
+    ];
+
+    // Initialize the page
+    document.addEventListener('DOMContentLoaded', function() {
+        renderDoctorCards(allDoctors);
+        addEventListeners();
+    });
+
+    function renderDoctorCards(doctorsList) {
+        const doctorGrid = document.getElementById('doctor-grid');
+        if (!doctorGrid) return; 
+        
+        doctorGrid.innerHTML = ''; 
+
+        if (doctorsList.length === 0) {
+            doctorGrid.innerHTML = '<p class="text-center text-xl text-gray-500 col-span-full py-10">No doctors match your criteria.</p>';
+            return;
+        }
+
+        doctorsList.forEach((doctor) => {
+            const card = document.createElement('div');
+            card.className = 'bg-white rounded-xl p-4 card-shadow flex flex-col';
+
+            const specialtiesHtml = doctor.specialties.map(spec =>
+                `<span class="text-xs font-medium text-gray-700 bg-gray-100 px-2 py-0.5 rounded-full">${spec}</span>`
+            ).join('');
+
+            card.innerHTML = `
+                <div class="flex items-start space-x-3 mb-4">
+                    <img src="${doctor.image}" alt="Dr. ${doctor.name}" onerror="this.onerror=null; this.src='https://placehold.co/40x40/F0F8FF/1e40af?text=DR';"
+                         class="w-10 h-10 rounded-full object-cover flex-shrink-0">
+                    <div class="flex-grow">
+                        <h3 class="text-base font-semibold text-gray-900">${doctor.name}</h3>
+                        <div class="flex flex-wrap gap-1 mt-1">
+                            ${specialtiesHtml}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-sm text-gray-600 space-y-2 mb-4 pl-12">
+                    <p class="flex items-center">
+                        <i data-lucide="map-pin" class="w-4 h-4 mr-2 text-gray-400"></i>
+                        ${doctor.location}
+                    </p>
+                    <p class="flex items-center">
+                        <i data-lucide="phone" class="w-4 h-4 mr-2 text-gray-400"></i>
+                        ${doctor.phone}
+                    </p>
+                </div>
+
+                <div class="ai-video-toggle relative mb-4 cursor-pointer p-2 rounded-lg bg-white border border-gray-200 hover:bg-gray-50 transition duration-150 mx-4">
+                    <div class="flex justify-between items-center text-sm font-medium text-gray-700">
+                        <span class="flex items-center">
+                            <i data-lucide="bot" class="w-4 h-4 mr-2 text-primary"></i>
+                            AI Video Introduction
+                        </span>
+                        <i data-lucide="chevron-down" class="w-4 h-4 text-gray-500 toggle-icon"></i>
+                    </div>
+                    <div class="video-content hidden mt-2 p-2 bg-gray-50 rounded text-xs text-gray-600">
+                        Simulated AI Video Transcript for Dr. ${doctor.name}: "Hello, I specialize in ${doctor.specialties[0]}. I look forward to connecting with you for your healthcare needs!"
+                    </div>
+                </div>
+
+                <button data-doctor-id="${doctor.id}" class="book-appointment-btn w-full bg-success text-white py-2.5 rounded-lg font-medium text-base hover:bg-green-700 transition duration-150 shadow-md mx-4 mb-4">
+                    Book Appointment
+                </button>
+            `;
+            
+            doctorGrid.appendChild(card);
+        });
+        lucide.createIcons();
+    }
+
+    function addEventListeners() {
+        // Add event listeners for this page
+        const specialtyFilter = document.getElementById('specialty-filter');
+        const nearMeButton = document.getElementById('near-me-button');
+
+        if (specialtyFilter) {
+            specialtyFilter.addEventListener('change', filterDoctors);
+        }
+
+        if (nearMeButton) {
+            nearMeButton.addEventListener('click', handleNearMeClick);
+        }
+
+        document.querySelectorAll('.book-appointment-btn').forEach(button => {
+            button.addEventListener('click', handleBookAppointment);
+        });
+
+        document.querySelectorAll('.ai-video-toggle').forEach(toggle => {
+            toggle.addEventListener('click', handleVideoToggle);
+        });
+    }
+
+    function filterDoctors() {
+        const specialtyFilter = document.getElementById('specialty-filter');
+        const selectedSpecialty = specialtyFilter.value;
+        
+        let filteredList = allDoctors;
+
+        if (selectedSpecialty !== 'All Specializations') {
+            filteredList = filteredList.filter(doctor => 
+                doctor.specialties.some(s => s.toLowerCase().includes(selectedSpecialty.toLowerCase()))
+            );
+        }
+        
+        renderDoctorCards(filteredList);
+    }
+
+    function handleNearMeClick() {
+        showMessage('Finding doctors near your current location (Indore)...', 'info');
+        filterDoctors();
+    }
+
+    function handleBookAppointment(event) {
+        const doctorId = parseInt(event.currentTarget.dataset.doctorId);
+        const doc = allDoctors.find(d => d.id === doctorId);
+        if (doc) {
+            showMessage(`Appointment request sent for Dr. ${doc.name}! (Simulated)`, 'success');
+            // In a real app, you would redirect to the booking page
+        }
+    }
+
+    function handleVideoToggle(event) {
+        const toggleElement = event.currentTarget;
+        const content = toggleElement.querySelector('.video-content');
+        const icon = toggleElement.querySelector('.toggle-icon');
+
+        if (content.classList.contains('hidden')) {
+            content.classList.remove('hidden');
+            icon.setAttribute('data-lucide', 'chevron-up');
+        } else {
+            content.classList.add('hidden');
+            icon.setAttribute('data-lucide', 'chevron-down');
+        }
+        lucide.createIcons();
+    }
+</script>
+{% endblock %}

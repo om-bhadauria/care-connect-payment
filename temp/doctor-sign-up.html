@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load Lucide Icons for professional UI elements -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <title>Document</title>
+</head>
+<body>
+    <main class="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8 flex-grow flex items-center justify-center">
+    <div class="w-full max-w-lg">
+        <div class="text-center mb-8">
+            <a href="#" class="text-3xl font-bold text-gray-800 flex items-center justify-center mb-2">
+                <i data-lucide="activity" class="w-6 h-6 mr-2 text-primary"></i>
+                CareConnect
+            </a>
+            <h1 class="text-2xl font-semibold text-gray-900 mt-4">Doctor Professional Registration</h1>
+            <p class="text-gray-600 text-sm">Join our network of specialists and connect with thousands of patients.</p>
+        </div>
+
+        <div class="bg-white p-8 rounded-xl shadow-lg card-shadow">
+            <form id="form-doctor-register" class="space-y-5">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <div>
+                        <label for="doc-reg-name" class="block text-sm font-medium text-gray-700">Full Name</label>
+                        <input type="text" id="doc-reg-name" name="name" required placeholder="Dr. Jane Doe"
+                                class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-success focus:border-success transition">
+                    </div>
+                    <div>
+                        <label for="doc-reg-phone" class="block text-sm font-medium text-gray-700">Phone Number</label>
+                        <input type="tel" id="doc-reg-phone" name="phone" required placeholder="+91 98765 43210"
+                                class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-success focus:border-success transition">
+                    </div>
+                </div>
+                
+                <div>
+                    <label for="doc-reg-email" class="block text-sm font-medium text-gray-700">Email Address</label>
+                    <input type="email" id="doc-reg-email" name="email" required placeholder="dr.jane@clinic.com"
+                           class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-success focus:border-success transition">
+                </div>
+
+                <div>
+                    <label for="doc-reg-specialty" class="block text-sm font-medium text-gray-700">Primary Specialty</label>
+                    <select id="doc-reg-specialty" name="specialty" required
+                             class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-success focus:border-success appearance-none pr-10 transition">
+                        <option value="">Select Specialty</option>
+                        <option value="Cardiologist">Cardiologist</option>
+                        <option value="Neurologist">Neurologist</option>
+                        <option value="Dermatologist">Dermatologist</option>
+                        <option value="Orthopedic Surgeon">Orthopedic Surgeon</option>
+                        <option value="Pediatrician">Pediatrician</option>
+                        <option value="General Physician">General Physician</option>
+                    </select>
+                </div>
+                
+                <div>
+                    <label for="doc-reg-location" class="block text-sm font-medium text-gray-700">City / Location</label>
+                    <input type="text" id="doc-reg-location" name="location" required placeholder="Indore"
+                           class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-success focus:border-success transition">
+                </div>
+                
+                <div>
+                    <label for="doc-reg-bio" class="block text-sm font-medium text-gray-700">Short Bio / Expertise (Max 200 chars)</label>
+                    <textarea id="doc-reg-bio" name="bio" rows="3" maxlength="200" required
+                              class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-success focus:border-success resize-none transition" placeholder="E.g., 10 years experience in complex heart rhythm disorders."></textarea>
+                </div>
+
+                <button type="submit" class="w-full py-2.5 px-4 border border-transparent rounded-lg shadow-md text-base font-medium text-white bg-green-700 hover:bg-green-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-success transition duration-150 mt-6">
+                    Submit Registration
+                </button>
+            </form>
+        </div>
+        
+        <div class="mt-6 text-center text-sm">
+            <p class="text-gray-600">
+                Already registered as a doctor? 
+                <a href="/templates/doctor-login.html" class="text-primary hover:text-blue-700 font-semibold underline">Sign In Here</a>
+            </p>
+        </div>
+    </div>
+</main>
+</body>
+</html>

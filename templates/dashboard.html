@@ -1,0 +1,198 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - CareConnect{% endblock %}
+
+{% block content %}
+{% if current_user.role == 'doctor' %}
+<!-- Doctor Dashboard -->
+<header class="text-center mb-10 mt-10">
+    <h1 class="text-3xl font-normal text-gray-800 mb-2">Welcome to your Portal, Dr. {{ current_user.name.split(' ')[0] }}</h1>
+    <p class="text-lg text-gray-500">Your practice statistics and daily schedule.</p>
+</header>
+
+<section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+    {% for stat in [
+        {"title": "Today's Consults", "value": "8", "icon": "user-check", "color": "text-success", "bg": "bg-green-100"},
+        {"title": "Total Patients", "value": "458", "icon": "users", "color": "text-primary", "bg": "bg-blue-100"},
+        {"title": "Avg. Rating", "value": "4.8/5.0", "icon": "star", "color": "text-yellow-600", "bg": "bg-yellow-100"},
+        {"title": "Consultation Hours", "value": "150 hrs", "icon": "briefcase", "color": "text-indigo-600", "bg": "bg-indigo-100"}
+    ] %}
+    <div class="bg-white rounded-xl p-6 card-shadow flex items-center space-x-4">
+        <div class="p-3 rounded-full {{ stat.bg }} {{ stat.color }}">
+            <i data-lucide="{{ stat.icon }}" class="w-6 h-6"></i>
+        </div>
+        <div>
+            <p class="text-2xl font-bold text-gray-900">{{ stat.value }}</p>
+            <p class="text-sm text-gray-500">{{ stat.title }}</p>
+        </div>
+    </div>
+    {% endfor %}
+</section>
+
+<section class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-10">
+    <!-- Today's Schedule -->
+    <div class="lg:col-span-2 bg-white rounded-xl p-6 card-shadow">
+        <h2 class="text-xl font-semibold text-gray-800 mb-4 flex items-center justify-between">
+            <span><i data-lucide="clipboard-check" class="w-5 h-5 mr-2 inline-block text-success"></i> Today's Schedule (Oct 3)</span>
+            <span class="text-sm font-normal text-gray-500">6 Confirmed Appointments</span>
+        </h2>
+        <div class="space-y-4">
+            {% for appointment in [
+                {"time": "09:00 AM", "patient": "Aarav K.", "reason": "Post-operative check-up", "status": "Confirmed", "isVideo": false},
+                {"time": "10:30 AM", "patient": "Priya S.", "reason": "Chronic migraine consultation", "status": "Confirmed", "isVideo": true},
+                {"time": "11:00 AM", "patient": "Vihan D.", "reason": "Follow-up on sleep disorder", "status": "Canceled", "isVideo": false},
+                {"time": "02:00 PM", "patient": "Rani T.", "reason": "New patient neurological assessment", "status": "Confirmed", "isVideo": true}
+            ] %}
+            <div class="flex items-center justify-between p-4 border-b last:border-b-0 {{ 'bg-red-50' if appointment.status == 'Canceled' else 'hover:bg-gray-50' }} transition">
+                <div class="flex items-center space-x-3">
+                    <i data-lucide="{{ 'video' if appointment.isVideo else 'user' }}" class="w-5 h-5 {{ 'text-primary' if appointment.isVideo else 'text-success' }}"></i>
+                    <div>
+                        <p class="font-medium text-gray-800">{{ appointment.patient }} - {{ appointment.time }}</p>
+                        <p class="text-xs text-gray-500">{{ appointment.reason }}</p>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <span class="px-2 py-0.5 text-xs font-semibold rounded-full {{ 'bg-success text-white' if appointment.status == 'Confirmed' else 'bg-red-500 text-white' }}">
+                        {{ appointment.status }}
+                    </span>
+                    {% if appointment.status == 'Confirmed' %}
+                    <button class="text-primary hover:text-blue-700 p-1 rounded-full" onclick="showMessage('Starting consultation with {{ appointment.patient }}', 'info')">
+                        <i data-lucide="external-link" class="w-4 h-4"></i>
+                    </button>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    
+    <!-- Quick Actions & Stats -->
+    <div class="space-y-6">
+        <!-- Action Center -->
+        <div class="bg-primary-light rounded-xl p-6 card-shadow">
+            <h2 class="text-xl font-semibold text-primary mb-4 flex items-center">
+                <i data-lucide="zap" class="w-5 h-5 mr-2"></i>
+                Action Center
+            </h2>
+            <button onclick="showMessage('Availability updated for the week.', 'success')" class="w-full py-2.5 mb-3 bg-primary text-white rounded-lg hover:bg-blue-700 transition font-medium flex items-center justify-center">
+                <i data-lucide="clock" class="w-4 h-4 mr-2"></i> Update Availability
+            </button>
+            <button onclick="showMessage('Patient queue page loaded.', 'info')" class="w-full py-2.5 bg-success text-white rounded-lg hover:bg-green-700 transition font-medium flex items-center justify-center">
+                <i data-lucide="users" class="w-4 h-4 mr-2"></i> View Patient Queue
+            </button>
+        </div>
+
+        <!-- Messages Summary -->
+        <div class="bg-white rounded-xl p-6 card-shadow">
+            <h2 class="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+                <i data-lucide="message-square" class="w-5 h-5 mr-2 text-primary"></i>
+                Messages
+            </h2>
+            <div class="space-y-3 text-sm">
+                <div class="flex justify-between">
+                    <span class="text-gray-600">Unread Patient Messages:</span>
+                    <span class="font-bold text-red-500">4</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-gray-600">New Follow-up Requests:</span>
+                    <span class="font-bold text-orange-500">2</span>
+                </div>
+                <button onclick="showMessage('Loading messaging inbox...', 'info')" class="mt-3 w-full text-primary hover:text-blue-700 text-sm font-medium">Go to Inbox</button>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% else %}
+<!-- Patient Dashboard -->
+<header class="text-center mb-10 mt-10">
+    <h1 class="text-3xl font-normal text-gray-800 mb-2">Welcome Back, {{ current_user.name.split(' ')[0] }}</h1>
+    <p class="text-lg text-gray-500">Your health overview at a glance.</p>
+</header>
+
+<section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+    {% for stat in [
+        {"title": "Total Appointments", "value": "12", "icon": "calendar-check", "color": "text-success", "bg": "bg-green-100"},
+        {"title": "Favorite Doctors", "value": "3", "icon": "heart", "color": "text-red-600", "bg": "bg-red-100"},
+        {"title": "Last Check-up", "value": "09/10/2025", "icon": "clock", "color": "text-primary", "bg": "bg-blue-100"},
+        {"title": "Health Articles Read", "value": "45", "icon": "book-open", "color": "text-yellow-600", "bg": "bg-yellow-100"}
+    ] %}
+    <div class="bg-white rounded-xl p-6 card-shadow flex items-center space-x-4">
+        <div class="p-3 rounded-full {{ stat.bg }} {{ stat.color }}">
+            <i data-lucide="{{ stat.icon }}" class="w-6 h-6"></i>
+        </div>
+        <div>
+            <p class="text-2xl font-bold text-gray-900">{{ stat.value }}</p>
+            <p class="text-sm text-gray-500">{{ stat.title }}</p>
+        </div>
+    </div>
+    {% endfor %}
+</section>
+
+<section class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <!-- Recent Activity -->
+    <div class="lg:col-span-2 bg-white rounded-xl p-6 card-shadow">
+        <h2 class="text-xl font-semibold text-gray-800 mb-4">Recent Activity</h2>
+        <ul class="space-y-4 text-sm">
+            <li class="flex items-center justify-between border-b pb-2">
+                <span class="flex items-center text-gray-600"><i data-lucide="check-circle" class="w-4 h-4 mr-2 text-success"></i>Appointment with Dr. Srivastava confirmed.</span>
+                <span class="text-gray-400">2 hours ago</span>
+            </li>
+            <li class="flex items-center justify-between border-b pb-2">
+                <span class="flex items-center text-gray-600"><i data-lucide="brain" class="w-4 h-4 mr-2 text-primary"></i>Used Symptom Checker for fatigue.</span>
+                <span class="text-gray-400">Yesterday</span>
+            </li>
+            <li class="flex items-center justify-between border-b pb-2">
+                <span class="flex items-center text-gray-600"><i data-lucide="file-text" class="w-4 h-4 mr-2 text-blue-500"></i>Medical records updated.</span>
+                <span class="text-gray-400">3 days ago</span>
+            </li>
+            <li class="flex items-center justify-between pb-2">
+                <span class="flex items-center text-gray-600"><i data-lucide="heart" class="w-4 h-4 mr-2 text-red-500"></i>Added Dr. Abha Jain to favorites.</span>
+                <span class="text-gray-400">3 days ago</span>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Next Appointment Summary -->
+    <div class="bg-white rounded-xl p-6 card-shadow border-l-4 border-success">
+        <h2 class="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+            <i data-lucide="calendar-check" class="w-5 h-5 mr-2 text-success"></i>
+            Next Appointment
+        </h2>
+        <p class="text-3xl font-bold text-gray-900 mb-2">10:00 AM</p>
+        <p class="text-lg text-gray-700 mb-4">Friday, November 15, 2025</p>
+        <p class="text-sm text-gray-600">
+            Dr. Sandeep Srivastava 
+            <span class="block text-xs text-gray-500">Cardiologist, Indore</span>
+        </p>
+        <div class="flex space-x-3 mt-4">
+            <a href="{{ url_for('my_schedule') }}" class="flex-1 bg-success text-white text-sm px-4 py-2 rounded-lg hover:bg-green-700 transition text-center">
+                View Details
+            </a>
+            <button onclick="showMessage('Joining video call...', 'info')" class="bg-primary text-white text-sm px-4 py-2 rounded-lg hover:bg-blue-800 transition">
+                <i data-lucide="video" class="w-4 h-4"></i>
+            </button>
+        </div>
+    </div>
+</section>
+
+<!-- Quick Actions -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+    <a href="{{ url_for('doctors') }}" class="bg-white p-6 rounded-xl card-shadow text-center hover:shadow-lg transition duration-300">
+        <i data-lucide="users" class="w-8 h-8 text-primary mx-auto mb-3"></i>
+        <h3 class="font-semibold text-gray-800 mb-2">Find Doctors</h3>
+        <p class="text-sm text-gray-600">Book appointments with specialists</p>
+    </a>
+    <a href="{{ url_for('symptom_checker') }}" class="bg-white p-6 rounded-xl card-shadow text-center hover:shadow-lg transition duration-300">
+        <i data-lucide="brain" class="w-8 h-8 text-success mx-auto mb-3"></i>
+        <h3 class="font-semibold text-gray-800 mb-2">Symptom Checker</h3>
+        <p class="text-sm text-gray-600">Get AI-powered health insights</p>
+    </a>
+    <a href="{{ url_for('health_feed') }}" class="bg-white p-6 rounded-xl card-shadow text-center hover:shadow-lg transition duration-300">
+        <i data-lucide="newspaper" class="w-8 h-8 text-purple-500 mx-auto mb-3"></i>
+        <h3 class="font-semibold text-gray-800 mb-2">Health Feed</h3>
+        <p class="text-sm text-gray-600">Read latest health articles</p>
+    </a>
+</div>
+{% endif %}
+{% endblock %}
